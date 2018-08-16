@@ -22,7 +22,7 @@ public class Client {
             InputStream is = socket.getInputStream();
 
 
-            String message = NAME + " says: \"" + args[0].trim() + "\"";
+            String message = "{\"name\":\"" + NAME + "\",\"message\":\"" + args[0] + "\"}";
             os.write(message.length());
             os.write(message.getBytes());
             os.flush();
