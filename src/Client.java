@@ -1,12 +1,10 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Client {
 
     private static final String HOST = "localhost";
-    private static final int PORT = 4434;
+    private static final int PORT = 8088;
     private static final String NAME = "Mr.Smith";
 
     public static void main(String[] args) {
@@ -18,19 +16,21 @@ public class Client {
 
         try {
             Socket socket = new Socket(HOST, PORT);
+
             OutputStream os = socket.getOutputStream();
             InputStream is = socket.getInputStream();
+            DataInputStream dis = new DataInputStream(is);
+            DataOutputStream dos = new DataOutputStream(os);
 
 
             String message = "{\"name\":\"" + NAME + "\",\"message\":\"" + args[0] + "\"}";
-            os.write(message.length());
-            os.write(message.getBytes());
-            os.flush();
+            dos.writeUTF(message);
+            dos.flush();
             System.out.println("Sent: " + message);
 
-            byte[] buff = new byte[is.read()];
-            is.read(buff);
-            String answer = new String(buff);
+
+
+            String answer = dis.readUTF();
             System.out.println("Server: " + answer);
 
             socket.close();
@@ -42,7 +42,6 @@ public class Client {
             e.printStackTrace();
             System.exit(1);
         }
-
 
     }
 }
